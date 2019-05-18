@@ -51,3 +51,53 @@ post '/contacts' do
 
   erb :message
 end
+
+configure do
+  enable :sessions
+end
+
+helpers do
+  def login
+    session[:identity] ? session[:identity] : 'Вход в систему'
+  end
+end
+
+before '/secure/*' do
+  unless session[:identity]
+    session[:previous_url] = request.path
+    @error = 'Sorry, you need to be logged in to visit ' + request.path
+    halt erb :login
+  end
+end
+
+get '/' do
+  erb 'Can you handle a <a href="/secure/place">пароль</a>?'
+end
+
+get '/admin' do
+  erb :admin
+end
+
+post '/admin' do
+  session[:identity] = params['login']
+  session[:identity] = params['password']
+    @login = params[:login]
+	@password = params[:password]
+	if @login == 'admin' && @password == "secret"
+		 	 where_user_came_from = session[:previous_url] || '/'
+ 			 redirect to where_user_came_from
+	else
+		@report = '<p>Доступ запрещён! Неправильный логин или пароль.</p>'
+		erb :admin
+	end
+ 
+end
+
+get '/logout' do
+  session.delete(:identity)
+  erb "<div class='alert alert-message'>Вы вышли из системы</div>"
+end
+
+get '/secure/place' do
+  erb 'This is a secret place that only <%=session[:identity]%> has access to!'
+end
