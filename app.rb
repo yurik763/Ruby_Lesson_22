@@ -36,3 +36,18 @@ end
 get '/contacts' do
   erb :contacts
 end
+
+post '/contacts' do
+  @email = params[:email]
+  @userstext = params[:userstext]
+
+  @title = "Спасибо!"
+  @message = "Ваше сообщение принято"
+
+  # запишем в файл то, что ввёл клиент
+  f = File.open './public/contacts.txt', 'a'
+  f.write "Email: #{@email}, сообщение: #{@userstext}\n"
+  f.close
+
+  erb :message
+end
