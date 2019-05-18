@@ -2,6 +2,14 @@
 <p>На этой странице вы сможете записаться к нам в Barber Shop</p>
 
 <form action="/visit" method="POST">
+  <label>Выбор парикмахер</label>
+  <select name="baber">
+    <option value="none">Выберите парикмахера</option>
+    <option value="Walter White">Walter White</option>
+    <option value="Jessie Pinkman">Jessie Pinkman</option>
+    <option value="Gus Fring">Gus Fring</option>
+  </select>
+
   <div class="form-group">
     <label>Ваше имя</label>
     <input name="username" type="text" class="form-control" placeholder="Ваше имя">
